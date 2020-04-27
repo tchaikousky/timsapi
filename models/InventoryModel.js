@@ -11,7 +11,7 @@ class InventoryModel {
 
     static async getInventoryByUser(userId) {
         try {
-            const response = await db.any(`SELECT * FROM inventory WHERE userId = ${userId}`);
+            const response = await db.any(`SELECT product.name, inventory.productid,  inventory.startweight, inventory.currentweight FROM product INNER JOIN inventory ON product.id = inventory.productid WHERE inventory.userId = ${userId}`);
             return response;
         }catch (error) {
             console.error(error);
