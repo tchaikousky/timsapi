@@ -29,9 +29,9 @@ router.post('/login', cors(), async function(req, res) {
     req.session.email = user[0].email;
     req.session.firstName = user[0].firstname;
   
-    res.send(req.session.userName + ' is logged as ' + req.session.firstName + ' ' + req.session.email);
+    res.json(req.session.userName + ' is logged as ' + req.session.firstName + ' ' + req.session.email);
   } else {
-    res.send('Unauthorized');
+    res.json('Unauthorized');
   };
 });
 
