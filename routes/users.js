@@ -31,7 +31,7 @@ router.post('/login', cors(), async function(req, res) {
   
     res.json(req.session.userName + ' is logged as ' + req.session.firstName + ' ' + req.session.email);
   } else {
-    res.json('Unauthorized');
+    res.json(userName);
   };
 });
 
