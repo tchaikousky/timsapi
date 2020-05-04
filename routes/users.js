@@ -22,16 +22,16 @@ router.post('/login', cors(), async function(req, res) {
   const password = req.body.password;
 
   const user = await usersModel.checkUser(userName, password);
-  console.log(user);
+  console.log(userName);
   if(user.length === 1) {
     req.session.id = user[0].id
     req.session.userName = user[0].username;
     req.session.email = user[0].email;
     req.session.firstName = user[0].firstname;
   
-    res.json(req.session.userName + ' is logged as ' + req.session.firstName + ' ' + req.session.email);
+    res.json(user[0]);
   } else {
-    res.json(userName);
+    res.json("Unauthorized");
   };
 });
 
@@ -45,15 +45,16 @@ router.post('/signup', cors(), async function(req, res) {
   const userNameCheck = await usersModel.checkUserName(userName);
   const userEmailCheck = await usersModel.checkUserEmail(email);
 
+  
   if(userNameCheck.length === 0 && userEmailCheck.length === 0) {
     const user = new usersModel(null, firstName, lastName, userName, email, password);
     user.addUser();
     console.log(user);
-    res.send(req.body.userName + ' has been added.')
+    res.json(req.body.userName + ' has been added.')
   } else if(userNameCheck.length > 0) {
-    res.send(req.body.userName + ' is already in use!');
+    res.json(req.body.userName + ' is already in use!');
   } else {
-    res.send(req.body.email + ' is already in use!');
+    res.json(req.body.email + ' is already in use!');
   }
 
 });

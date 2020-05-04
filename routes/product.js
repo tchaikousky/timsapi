@@ -9,11 +9,20 @@ router.get('/', cors(), async function(req, res, next) {
     res.json(product);
 });
 
+router.get('/search/:searchParam?', cors(), async function(req, res, next) {
+  const { searchParam } = req.params;
+  const products = await productModel.searchProduct(searchParam);
+  console.log(req.params);
+  res.json(products);
+});
+
 router.get('/:productId?', cors(), async function(req, res, next) {
   const { productId } = req.params;
   const product = await productModel.getSingleProduct(productId);
 
   res.json(product);
 });
+
+
 
 module.exports = router;

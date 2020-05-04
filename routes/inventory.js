@@ -15,8 +15,9 @@ router.post('/users/id', cors(), async function (req, res, next) {
     const productId = req.body.productId;                                                                                                
     const startWeight = req.body.startWeight;
     const currentWeight = req.body.currentWeight;
+    const price = req.body.price;
 
-    const inventory = new inventoryModel(null, userId, productId, startWeight, currentWeight);
+    const inventory = new inventoryModel(null, userId, productId, startWeight, currentWeight, price);
     inventory.addToInventory();
 
     res.send('Inventory has been updated.');

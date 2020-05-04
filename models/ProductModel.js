@@ -26,6 +26,17 @@ class ProductModel {
             return error;
         };
     };
+
+    static async searchProduct(searchParam) {
+        try {
+            const response = await db.any(`SELECT * FROM product WHERE name ILIKE '%${searchParam}%'`);
+            console.log(searchParam);
+            return response;
+        }catch (error) {
+            console.error(error);
+            return `Could not find ${searchParam} in our database.`
+        }
+    }
 }
 
 module.exports = ProductModel;

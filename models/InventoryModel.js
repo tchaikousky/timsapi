@@ -1,17 +1,18 @@
 const db = require('./conn.js');
 
 class InventoryModel {
-    constructor(id, userId, productId, startWeight, currentWeight) {
+    constructor(id, userId, productId, startWeight, currentWeight, price) {
         this.id = id;
         this.userId = userId;
         this.productId = productId;
         this.startWeight = startWeight;
         this.currentWeight = currentWeight;
+        this.price = price;
     }
 
     static async getInventoryByUser(userId) {
         try {
-            const response = await db.any(`SELECT product.name, inventory.productid,  inventory.startweight, inventory.currentweight FROM product INNER JOIN inventory ON product.id = inventory.productid WHERE inventory.userId = ${userId}`);
+            const response = await db.any(`SELECT product.name, product.price, inventory.productid,  inventory.startweight, inventory.currentweight FROM product INNER JOIN inventory ON product.id = inventory.productid WHERE inventory.userId = ${userId}`);
             return response;
         }catch (error) {
             console.error(error);
@@ -21,7 +22,7 @@ class InventoryModel {
 
     async addToInventory() {
         try {
-            const response = await db.any(`INSERT INTO inventory (userId, productId, startWeight, currentWeight) VALUES ($1, $2, $3, $4) RETURNING id`, [this.userId, this.productId, this.startWeight, this.currentWeight]);
+            const response = await db.any(`INSERT INTO inventory (userId, productId, startWeight, currentWeight, price) VALUES ($1, $2, $3, $4, $5) RETURNING id`, [this.userId, this.productId, this.startWeight, this.currentWeight, this.price]);
             return response;
         }catch (error) {
             console.error(error);
