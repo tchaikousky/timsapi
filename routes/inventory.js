@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const inventoryModel = require('../models/InventoryModel');
+const productModel = require('../models/ProductModel');
 const cors = require('cors');
 
 router.get('/:userId?', cors(), async function(req, res, next) {
@@ -15,13 +16,28 @@ router.post('/users/id', cors(), async function (req, res, next) {
     const productId = req.body.productId;                                                                                                
     const startWeight = req.body.startWeight;
     const currentWeight = req.body.currentWeight;
-    const price = req.body.price;
 
-    const inventory = new inventoryModel(null, userId, productId, startWeight, currentWeight, price);
+    const inventory = new inventoryModel(null, userId, productId, startWeight, currentWeight);
     inventory.addToInventory();
 
-    res.send('Inventory has been updated.');
+    res.json('Inventory has been updated.');
 });
+
+router.post('/users/input/list', cors(), async function (req, res, next) {
+    const list = req.body.listToAdd;
+    const userId = req.body.userId;
+    
+    console.log(list);
+    for(element of list) {
+        console.log('LOOK HERE DUMMY', element)
+        const product =  await productModel.getProductId(element.name);
+        console.log(product, "hey");
+        const inventory = new inventoryModel(null, userId, product[0].id, element.weight, element.weight);
+        await inventory.addToInventory();
+        
+        // res.json('Inventory has been updated');
+    }; 
+})
 
 router.post('/users/remove', cors(), async function (req, res, next) {
     const userId = req.body.userId;
@@ -29,7 +45,7 @@ router.post('/users/remove', cors(), async function (req, res, next) {
 
     const removedItem = await inventoryModel.removeFromInventory(userId, productId);
 
-    res.send('Removal complete');
+    res.json('Removal complete');
 });
 
 router.post('/users/update', cors(), async function (req, res, next) {
@@ -38,7 +54,7 @@ router.post('/users/update', cors(), async function (req, res, next) {
 
     const updatedItem = await inventoryModel.updateInventory(id, currentWeight);
 
-    res.send('Item has been updated');
+    res.json('Item has been updated');
 });
 
 module.exports = router;

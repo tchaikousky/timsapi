@@ -22,7 +22,7 @@ class InventoryModel {
 
     async addToInventory() {
         try {
-            const response = await db.any(`INSERT INTO inventory (userId, productId, startWeight, currentWeight, price) VALUES ($1, $2, $3, $4, $5) RETURNING id`, [this.userId, this.productId, this.startWeight, this.currentWeight, this.price]);
+            const response = await db.any(`INSERT INTO inventory (userid, productid, startweight, currentweight) VALUES ($1, $2, $3, $4) RETURNING id`, [this.userId, this.productId, this.startWeight, this.currentWeight]);
             return response;
         }catch (error) {
             console.error(error);

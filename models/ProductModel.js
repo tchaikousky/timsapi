@@ -37,6 +37,17 @@ class ProductModel {
             return `Could not find ${searchParam} in our database.`
         }
     }
+
+    static async getProductId(productName) {
+        try {
+            const response = await db.any(`SELECT id FROM product WHERE name = '${productName}'`);
+            console.log(response)
+            return response;
+        }catch (error) {
+            console.error(error);
+            return error;
+        }
+    }
 }
 
 module.exports = ProductModel;
